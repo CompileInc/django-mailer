@@ -53,7 +53,7 @@ def send_html_mail(subject, message, message_html, from_email, recipient_list,
     Function to queue HTML e-mails
     """
     from django.utils.encoding import force_unicode
-    from django.core.mail import EmailMultiAlternatives
+    from sendgrid.message import SendGridEmailMultiAlternatives
     from mailer.models import make_message
     
     priority = PRIORITY_MAPPING[priority]
@@ -68,7 +68,7 @@ def send_html_mail(subject, message, message_html, from_email, recipient_list,
                        to=recipient_list,
                        priority=priority)
     email = msg.email
-    email = EmailMultiAlternatives(email.subject, email.body, email.from_email, email.to)
+    email = SendGridEmailMultiAlternatives(email.subject, email.body, email.from_email, email.to)
     email.attach_alternative(message_html, "text/html")
     msg.email = email
     msg.save()

@@ -2,6 +2,8 @@ import base64
 import logging
 import pickle
 
+from sendgrid.message import SendGridEmailMessage
+
 try:
     from django.utils.timezone import now as datetime_now
     datetime_now  # workaround for pyflakes
@@ -9,7 +11,6 @@ except ImportError:
     from datetime import datetime
     datetime_now = datetime.now
 
-from django.core.mail import EmailMessage
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -161,7 +162,7 @@ def make_message(subject="", body="", from_email=None, to=None, bcc=None,
     """
     to = filter_recipient_list(to)
     bcc = filter_recipient_list(bcc)
-    core_msg = EmailMessage(
+    core_msg = SendGridEmailMessage(
         subject=subject,
         body=body,
         from_email=from_email,
